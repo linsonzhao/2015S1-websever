@@ -1,0 +1,67 @@
+div.fullblock {
+	width: 100%;
+	float: left;
+}
+
+div.bigblock {
+	text-align: right;
+	padding: 1px;
+	margin: 1px;
+	width: 55%;
+	height: 250px;
+	float: left;
+	/* 	background-color: #f9f9f9; */
+}
+
+div.halfblock {
+	text-align: right;
+	padding: 1px;
+	margin: 1px;
+	width: 50%;
+	height: 250px;
+	float: left;
+	/* 	background-color: #f9f9f9; */
+}
+
+div.smallblock {
+	text-align: left;
+	padding: 1px;
+	margin: 1px;
+	width: 30%;
+	height: 250px;
+	float: left;
+	/* 	background-color: #f9f9f9; */
+}
+
+div.sideblock {
+	/*     text-align: center; */
+	padding: 1px;
+	margin: 1px;
+	width: 5%;
+	height: 250px;
+	float: left;
+	/* 	background-color: #f9f9f9; */
+}
+
+div.left {
+	float: left;
+}
+
+div.right {
+	float: right;
+}
+
+div.center {
+	float: center;
+}
+
+
+div.halfleft {
+	text-align: left;
+	padding: 1px;
+	margin: 1px;
+	width: 50%;
+	height: 250px;
+	float: left;
+	/* 	background-color: #f9f9f9; */
+}

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<constant name="struts.devMode" value="true" />
+	<!-- <constant name="struts.devMode" value="false" /> -->
+
+	<package name="videotracking" namespace="/" extends="struts-default">
+
+		<action name="startup" class="controller.MainAction" method="startup">
+			<result name="success">/index.jsp</result>
+		</action>
+
+		<action name="sendMessage" class="controller.MainAction"
+			method="sendMessage">
+			<result name="success">/message.jsp</result>
+		</action>
+
+		<action name="koalaAwake" class="controller.MainAction" method="koalaAwake">
+			<result name="success">/message.jsp</result>
+		</action>
+
+		<action name="kangarooAwake" class="controller.MainAction"
+			method="kangarooAwake">
+			<result name="success">/message.jsp</result>
+		</action>
+
+		<action name="koalaVideo" class="controller.MainAction" method="koalaVideo">
+			<result name="success">/message.jsp</result>
+		</action>
+
+		<action name="kangarooVideo" class="controller.MainAction"
+			method="kangarooVideo">
+			<result name="success">/message.jsp</result>
+		</action>
+
+		<action name="uploadFile" class="controller.MainAction" method="uploadFile">
+			<result name="success">/upload.jsp</result>
+			<result name="input">/error.jsp</result>
+		</action>
+
+		<action name="upload" class="controller.FileAction" method="upload">
+			<result name="success">/message.jsp</result>
+			<result name="input">/error.jsp</result>
+		</action>
+
+		<action name="trackingJNI" class="controller.MainAction"
+			method="trackingJNI">
+			<result name="success">/message.jsp</result>
+		</action>
+
+		<action name="error" class="controller.MainAction" method="error">
+			<result name="success">/error.jsp</result>
+		</action>
+
+		<action name="getVideos" class="controller.MainAction" method="getVideos">
+			<result name="success">/videos.jsp</result>
+		</action>
+
+		<action name="getTrackingVideos" class="controller.MainAction"
+			method="getTrackingVideos">
+			<result name="success">/gettrackingvideos.jsp</result>
+		</action>
+
+		<action name="trackingVideo" class="controller.MainAction"
+			method="trackingVideo">
+			<result name="success">/trackingVideo.jsp</result>
+		</action>
+
+		<action name="playTracking" class="controller.MainAction"
+			method="playTracking">
+			<result name="success">/playTracking.jsp</result>
+		</action>
+
+		<action name="admin" class="controller.MainAction" method="admin">
+			<result name="success">/admin.jsp</result>
+		</action>
+
+		<action name="deleteVideo" class="controller.MainAction"
+			method="deleteVideo">
+			<result name="success">/admin.jsp</result>
+		</action>
+
+		<action name="deleteAllVideos" class="controller.MainAction"
+			method="deleteAllVideos">
+			<result name="success">/admin.jsp</result>
+		</action>
+	</package>
+</struts>

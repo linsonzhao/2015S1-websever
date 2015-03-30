@@ -1,0 +1,12 @@
+#videoTable{
+	
+}
+
+.noborder{
+	border: none;
+}
+
+.noborder td, .noborder th { 
+	width: 250px;
+	background-color: black;
+	}

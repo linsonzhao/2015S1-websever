@@ -1,0 +1,42 @@
+2014-12-29
+1.Add log4j
+
+2014-12-30
+The below code disable horizontal and vertical scroll function:
+<style>
+html, body {
+	max-width: 100%;
+	overflow-x: hidden;
+	max-height: 100%;
+	overflow-y: hidden;
+}
+</style>
+
+below code get the video width and height:
+	var v = document.getElementById("myvideo");
+	var videoHeight;
+	var videoWidth;
+	function pause_and_capture() {
+		videoHeight = v.getBoundingClientRect().height;
+		videoWidth = v.getBoundingClientRect().width;
+		v.pause();
+		ctx.drawImage(v, 0, 0);
+	}
+
+below code is to prevent concurrent issue:
+		synchronized(MainAction.class){
+			System.loadLibrary("libTracking");
+			TrackingJNI trackingJNI = new TrackingJNI();
+			appInfo.setTrackingDone( trackingJNI.trackingMethod(source, x, y, w, h, output));
+		}
+
+below code to generate browser acceptable mp4 format. Do not use CODEC_ID_MPEG4:
+			m_streamIndex = m_writer.addVideoStream(0, 0,
+					ICodec.ID.CODEC_ID_H264, w, h);
+
+
+2015-03-31
+This is updated version videotracking.
+
+This for GitHub testing...
+		
