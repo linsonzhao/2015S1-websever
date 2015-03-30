@@ -57,7 +57,9 @@ public class AppRun {
 	}
 	
 	public void test(){
-		String s = "This is for GitHub testing..";
+
+		int i = 10;
+		float f = 10.0f;
 	}
 
 }
