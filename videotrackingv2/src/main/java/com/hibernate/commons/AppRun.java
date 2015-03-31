@@ -60,6 +60,9 @@ public class AppRun {
 
 		int i = 10;
 		float f = 10.0f;
+		
+		double d = 2.5;
+		String s = "GitHub";
 	}
 
 }
