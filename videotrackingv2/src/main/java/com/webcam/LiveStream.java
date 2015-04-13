@@ -57,8 +57,6 @@ public class LiveStream {
     public void onClose(Session session) {
         System.out.println("Goodbye !");
         sessions.remove(session);
-
-        webcamStream.close();
     }
 
 }
