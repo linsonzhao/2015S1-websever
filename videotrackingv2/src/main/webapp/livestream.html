@@ -1,0 +1,36 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Insert title here</title>
+    </head>
+    <body>
+        <script type="text/javascript">
+            var ws = new WebSocket("ws://" + location.host + "/videotracking/livevideo");
+            ws.onopen = function () {
+                console.log("Openened connection to websocket");
+            }
+            ws.onmessage = function (msg) {
+                var target = document.getElementById("target");
+                url = window.webkitURL.createObjectURL(msg.data);
+                target.onload = function () {
+                    window.webkitURL.revokeObjectURL(url);
+                };
+                target.src = url;
+                console.log(msg.data);
+
+            }
+            timer = setInterval(
+                    function () {
+                        ws.send("waiting for image..");
+                    }, 100);
+        </script>
+        <div style="visibility: hidden; width: 0; height: 0;">
+            <canvas width="320" id="canvas" height="240"></canvas>
+        </div>
+
+        <div>
+            <img id="target" style="display: inline;" />
+        </div>
+    </body>
+</html>

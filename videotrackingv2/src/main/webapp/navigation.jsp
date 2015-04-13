@@ -30,7 +30,7 @@
 
 <!-- 		<li><a href="#">Subscribe</a></li> -->
 
-		<li><a href="#">Comments</a></li>
+		<li><a href="<%=request.getContextPath()%>/livestream.html">LiveVieo</a></li>
 
 		<%-- 		<li><a href="<%=request.getContextPath()%>/demo.jsp">Demo</a></li> --%>
 
