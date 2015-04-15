@@ -17,9 +17,9 @@
 		}
 		ws.onmessage = function(msg) {
 			var target = document.getElementById("target");
-			url = window.webkitURL.createObjectURL(msg.data);
+			url = window.URL.createObjectURL(msg.data);
 			target.onload = function() {
-				window.webkitURL.revokeObjectURL(url);
+				window.URL.revokeObjectURL(url);
 			};
 			target.src = url;
 			console.log(msg.data);

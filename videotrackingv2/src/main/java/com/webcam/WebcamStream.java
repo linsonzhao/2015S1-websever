@@ -67,30 +67,4 @@ public class WebcamStream {
         return imageBytes;
 	}
 
-    public void openWebcam() throws Throwable {
-        
-        byte[] imageBytes = null;
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-
-        System.out.println("webcam: " + webcam.getName());
-        System.out.println("webcam: " + webcam.getWebcamListenersCount());
-        
-        webcam.open(true);
-
-        BufferedImage image = ConverterFactory.convertToType(
-                webcam.getImage(), BufferedImage.TYPE_3BYTE_BGR);
-
-        ImageIO.write(image, "jpg", baos);
-        baos.flush();
-        imageBytes = baos.toByteArray();
-        baos.close();
-        
-        InputStream in = new ByteArrayInputStream(imageBytes);
-			BufferedImage bImageFromConvert = ImageIO.read(in);
- 
-			ImageIO.write(bImageFromConvert, "jpg", new File(
-					"/Users/linson/Documents/temp/linson.jpg"));
-        System.out.println("size: " + imageBytes.length);
-
-    }
 }

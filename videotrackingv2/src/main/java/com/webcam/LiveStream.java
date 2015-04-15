@@ -18,10 +18,12 @@ public class LiveStream {
 
     private static final Set<Session> sessions = Collections
             .synchronizedSet(new HashSet<Session>());
-    private WebcamStream webcamStream;
-
+//    private WebcamStream webcamStream;
+    private FaceDetection faceDetection;
+    
     public LiveStream() {
-    	webcamStream = WebcamStream.getInstance();
+//    	webcamStream = WebcamStream.getInstance();
+    	faceDetection = FaceDetection.getInstance();
     }
 
     @OnOpen
@@ -29,16 +31,19 @@ public class LiveStream {
         session.setMaxBinaryMessageBufferSize(1024 * 512);
         sessions.add(session);
         System.out.println("session open");
-
+        
     }
 
     @OnMessage
 //    public void processVideo(byte[] imageData, Session session) {
     public void processVideo(String message, Session session) {
         System.out.println("INsite process Video");
+        System.out.println("message: " + message);
+        
         try {
 
-            byte[] imageInByte = webcamStream.getWebcamStream();
+//            byte[] imageInByte = webcamStream.getWebcamStream();
+        	byte[] imageInByte = faceDetection.getImageBytes();
 
             ByteBuffer buf = ByteBuffer.wrap(imageInByte);
 
@@ -46,9 +51,7 @@ public class LiveStream {
                 session2.getBasicRemote().sendBinary(buf);
             }
 
-            System.out.println("message: " + message);
-
-        } catch (Throwable ioe) {
+        } catch (Exception ioe) {
             System.out.println("Error sending message " + ioe.getMessage());
         }
     }
@@ -57,6 +60,7 @@ public class LiveStream {
     public void onClose(Session session) {
         System.out.println("Goodbye !");
         sessions.remove(session);
+        FaceDetection.getInstance().setSwitcher(false);
     }
 
 }
