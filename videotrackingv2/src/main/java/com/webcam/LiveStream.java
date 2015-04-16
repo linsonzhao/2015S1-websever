@@ -16,51 +16,55 @@ import javax.websocket.server.ServerEndpoint;
 @ServerEndpoint("/livevideo")
 public class LiveStream {
 
-    private static final Set<Session> sessions = Collections
-            .synchronizedSet(new HashSet<Session>());
-//    private WebcamStream webcamStream;
-    private FaceDetection faceDetection;
-    
-    public LiveStream() {
-//    	webcamStream = WebcamStream.getInstance();
-    	faceDetection = FaceDetection.getInstance();
-    }
+	private static final Set<Session> sessions = Collections
+			.synchronizedSet(new HashSet<Session>());
+	// private WebcamStream webcamStream;
+	private FaceDetection faceDetection;
 
-    @OnOpen
-    public void onOpen(Session session) throws IOException, EncodeException {
-        session.setMaxBinaryMessageBufferSize(1024 * 512);
-        sessions.add(session);
-        System.out.println("session open");
-        
-    }
+	public LiveStream() {
+		// webcamStream = WebcamStream.getInstance();
+		faceDetection = FaceDetection.getInstance();
+	}
 
-    @OnMessage
-//    public void processVideo(byte[] imageData, Session session) {
-    public void processVideo(String message, Session session) {
-        System.out.println("INsite process Video");
-        System.out.println("message: " + message);
-        
-        try {
+	@OnOpen
+	public void onOpen(Session session) throws IOException, EncodeException {
+		session.setMaxBinaryMessageBufferSize(1024 * 512);
+		sessions.add(session);
+		faceDetection.setPlay(true);
+		System.out.println("session open");
 
-//            byte[] imageInByte = webcamStream.getWebcamStream();
-        	byte[] imageInByte = faceDetection.getImageBytes();
+	}
 
-            ByteBuffer buf = ByteBuffer.wrap(imageInByte);
+	@OnMessage
+	// public void processVideo(byte[] imageData, Session session) {
+	public void processVideo(String message, Session session) {
+		System.out.println("INsite process Video");
+		System.out.println("message: " + message);
 
-            for (Session session2 : sessions) {
-                session2.getBasicRemote().sendBinary(buf);
-            }
+		try {
 
-        } catch (Exception ioe) {
-            System.out.println("Error sending message " + ioe.getMessage());
-        }
-    }
+			// byte[] imageInByte = webcamStream.getWebcamStream();
+			byte[] imageInByte = faceDetection.getImageBytes();
 
-    @OnClose
-    public void onClose(Session session) {
-        System.out.println("Goodbye !");
-        sessions.remove(session);
-        FaceDetection.getInstance().setSwitcher(false);
-    }
+			ByteBuffer buf = ByteBuffer.wrap(imageInByte);
+
+			for (Session session2 : sessions) {
+				session2.getBasicRemote().sendBinary(buf);
+			}
+
+		} catch (Exception ioe) {
+			System.out.println("Error sending message " + ioe.getMessage());
+		}
+	}
+
+	@OnClose
+	public void onClose(Session session) {
+		System.out.println("Goodbye !");
+		sessions.remove(session);
+
+		if (sessions.isEmpty()) {
+			faceDetection.setPlay(false);
+		}
+	}
 
 }

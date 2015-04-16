@@ -30,21 +30,22 @@ public class FaceDetection {
 	private CascadeClassifier face_cascade;
 	private BufferedImage image;
 	AppInfo appInfo;
-	public boolean switcher;
+	public boolean play;
+	Thread thread;
 
 	public FaceDetection(){
 		appInfo = AppInfo.getInstance();
 		FaceDetection.loadLibrary();
-		switcher = false;
+		play = true;
 		
-		Thread thread = new Thread(){
+		thread = new Thread(){
 			public void run(){
 				FaceDetection faceDetection = FaceDetection.getInstance();
-				faceDetection.setSwitcher(true);
 				faceDetection.updateImage();
 			}
 		};
 		thread.start();
+		
 	}
 	
 	public static FaceDetection getInstance(){
@@ -60,14 +61,14 @@ public class FaceDetection {
 		System.loadLibrary("opencv_java249");
 	}
 	
-	public boolean isSwitcher() {
-		return switcher;
+	public boolean isPlay() {
+		return play;
 	}
 
-	public void setSwitcher(boolean switcher) {
-		this.switcher = switcher;
+	public void setPlay(boolean play) {
+		this.play = play;
 	}
-	
+
 	private BufferedImage MatToBufferedImage(Mat matBGR) {
 		long startTime = System.nanoTime();
 		int width = matBGR.width(), height = matBGR.height(), channels = matBGR
@@ -121,13 +122,13 @@ public class FaceDetection {
 		return mRgba;
 	}
 	
-	public void updateImage() {
+	synchronized public void updateImage() {
 
 		VideoCapture capture = new VideoCapture(0);
 		Mat webcam_image = new Mat();
-		
+		int count = 1;
 		if (capture.isOpened()) {
-			while (this.switcher) {
+			while (play) {
 				capture.read(webcam_image);
 				if (!webcam_image.empty()) {
 					webcam_image = detect(webcam_image);
@@ -135,13 +136,23 @@ public class FaceDetection {
 				} else {
 					System.out.println(" -- Break!");
 				}
+				
+				System.out.println("count: " + count);
 			}
 		}
+		System.out.println("Update Image is completed...");
+		capture.release();
+
 	}
 	
 	public byte[] getImageBytes(){
 		byte[] imageBytes = null;
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		
+		while(image==null){
+			//wait for camera image...//
+//			System.out.println("Waiting for camera image...");
+		}
 		
         try {
 			ImageIO.write(image, "jpg", baos);
@@ -160,15 +171,28 @@ public class FaceDetection {
 //		FaceDetection faceDetection = FaceDetection.getInstance();
 //		faceDetection.getImageBytes();
 		
+//		FaceDetection.loadLibrary();
+//		VideoCapture capture = new VideoCapture(0);
+//		Mat webcam_image = new Mat();
+//		
+//		if(capture.isOpened()){
+//			while(true){
+//				capture.read(webcam_image);
+//				System.out.println(webcam_image.width() + ", " + webcam_image.height());
+//			}
+//		}
+		
 		FaceDetection.loadLibrary();
 		VideoCapture capture = new VideoCapture(0);
 		Mat webcam_image = new Mat();
-		
-		if(capture.isOpened()){
-			while(true){
+		int count = 1;
+		if (capture.isOpened()) {
+			while (++count<60) {
 				capture.read(webcam_image);
-				System.out.println(webcam_image.width() + ", " + webcam_image.height());
+				
+				System.out.println("count: " + count);
 			}
 		}
+		System.out.println("Update Image is completed...");
 	}
 }
