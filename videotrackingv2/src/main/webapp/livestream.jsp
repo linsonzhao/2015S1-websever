@@ -6,12 +6,14 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <link rel="stylesheet"
 	href="<%=request.getContextPath()%>/css/myNav.css">
+
 <title>Insert title here</title>
 </head>
 <body background="<%=request.getContextPath()%>/images/images.jpg">
 	<%@ include file="navigation.jsp"%>
 	<script type="text/javascript">
-		var ws = new WebSocket("ws://" + location.host + "/videotracking/livevideo");
+		var ws = new WebSocket("ws://" + location.host
+				+ "/videotracking/livevideo");
 		ws.onopen = function() {
 			console.log("Openened connection to websocket");
 		}
@@ -27,18 +29,30 @@
 		}
 		timer = setInterval(function() {
 			ws.send("waiting for image..");
-		}, 100);
-		
+		}, 50);
 	</script>
 
 	<center>
 		<h1>&nbsp</h1>
 		<h1>&nbsp</h1>
+
+		<div>
+		<span><input id="btnUpdateList" type="button" class="button" value="Update Webcam List"></span>
+			
+			<span>Webcam name: <select id="slWebcamName">
+<!-- 				<option name="type" value="Appliance">Appliance</option> -->
+<!-- 				<option name="type" value="Electronics">Electronics</option> -->
+<!-- 				<option name="type" value="Lights">Lights</option> -->
+<!-- 				<option name="type" value="Other">Other</option> -->
+		</select></span>
+		
+		</div>
+		
 		<h1>&nbsp</h1>
+
 		<div>
 			<img id="target" style="display: inline;" />
 		</div>
 	</center>
-
 </body>
 </html>

@@ -18,12 +18,12 @@ public class LiveStream {
 
 	private static final Set<Session> sessions = Collections
 			.synchronizedSet(new HashSet<Session>());
-	// private WebcamStream webcamStream;
 	private FaceDetection faceDetection;
+	private CamDeviceSessionHandler sessionHandler;
 
 	public LiveStream() {
-		// webcamStream = WebcamStream.getInstance();
 		faceDetection = FaceDetection.getInstance();
+		sessionHandler = CamDeviceSessionHandler.getInstance();
 	}
 
 	@OnOpen
@@ -31,19 +31,17 @@ public class LiveStream {
 		session.setMaxBinaryMessageBufferSize(1024 * 512);
 		sessions.add(session);
 		faceDetection.setPlay(true);
+		
 		System.out.println("session open");
 
 	}
 
 	@OnMessage
-	// public void processVideo(byte[] imageData, Session session) {
 	public void processVideo(String message, Session session) {
 		System.out.println("INsite process Video");
 		System.out.println("message: " + message);
 
 		try {
-
-			// byte[] imageInByte = webcamStream.getWebcamStream();
 			byte[] imageInByte = faceDetection.getImageBytes();
 
 			ByteBuffer buf = ByteBuffer.wrap(imageInByte);
