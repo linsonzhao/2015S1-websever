@@ -12,7 +12,7 @@ public class JniMainClass {
 	public static JniMainClass getInstance() {
 		if (jni == null) {
 			jni = new JniMainClass();
-			System.loadLibrary("libTracking");
+//			System.loadLibrary("libTracking");
 		}
 		return jni;
 	}

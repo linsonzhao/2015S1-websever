@@ -41,6 +41,7 @@ public class Initialize extends HttpServlet {
 		scheduler.scheduleControl();
 		
 		CamLibrary.loadLibrary();
+		System.loadLibrary("libTracking");
 
 		System.out.println("Starting...");
 		logger.debug("Starting...");
