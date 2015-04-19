@@ -71,8 +71,8 @@ public class WebcamStream {
 	}
 	
 	public static void main(String[] args){
-		WebcamStream webcamStream = WebcamStream.getInstance();
-		List<Webcam> webcamList = Webcam.getWebcams();
+		CamMap camMap = CamMap.getInstance();
+		List<Webcam> webcamList = camMap.getWebcamList();
 		for(Webcam w: webcamList){
 			System.out.println(w.getName() + ", " + w.getFPS() + ", " + w.getViewSize().toString() + ", " + w.getDevice().hashCode());
 		}

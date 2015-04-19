@@ -43,7 +43,7 @@ public class CamDeviceWSS {
     private FaceDetection faceDetection;
     
     public CamDeviceWSS(){
-    	faceDetection = FaceDetection.getInstance();
+    	faceDetection = new FaceDetection(0);
     }
 
     @OnOpen
@@ -101,7 +101,6 @@ public class CamDeviceWSS {
             			break;
             		}
             	}
-            	Webcam.shutdown();
             }
         }
     }

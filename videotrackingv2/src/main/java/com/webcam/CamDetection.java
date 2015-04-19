@@ -26,21 +26,48 @@ import org.opencv.objdetect.CascadeClassifier;
 
 import com.github.sarxos.webcam.Webcam;
 
-public class FaceDetection {
+import dao.AppInfo;
 
+public class CamDetection {
+	private static CamDetection faceDetection;
 	private CascadeClassifier face_cascade;
 	private BufferedImage image;
+	private AppInfo appInfo;
 	private boolean play;
 	private boolean update;
 	private List<Webcam> webcamList;
-	private int index;
 
-	public FaceDetection(int index) {
-
-		face_cascade = CamLibrary.getFace_cascade();
+	public CamDetection() {
+		appInfo = AppInfo.getInstance();
+		CamDetection.loadLibrary();
 		play = true;
 		update = false;
-		this.index = index;
+		webcamList = Webcam.getWebcams();
+
+		// /////////////////////////////////////////
+		face_cascade = new CascadeClassifier(appInfo.getHostPath()
+				+ "\\xml\\haarcascade_frontalface_alt.xml");
+		// face_cascade = new CascadeClassifier(
+		// "C:/temp/haarcascade_frontalface_alt.xml");
+		if (face_cascade.empty()) {
+			System.out.println("--(!)Error in loading");
+		} else {
+			System.out.println("Face classifier loaded up");
+		}
+		// ///////////////////////////////////////
+	}
+
+	public static CamDetection getInstance() {
+		if (faceDetection == null) {
+			faceDetection = new CamDetection();
+		}
+
+		return faceDetection;
+	}
+
+	synchronized public static void loadLibrary() {
+		// Load the native library.
+		System.loadLibrary("opencv_java249");
 	}
 
 	public boolean isPlay() {
@@ -62,7 +89,7 @@ public class FaceDetection {
 	public List<Webcam> getWebcamList() {
 		webcamList = Webcam.getWebcams();
 		
-		Webcam.shutdown();
+//		Webcam.shutdown();
 		return webcamList;
 	}
 
@@ -107,39 +134,38 @@ public class FaceDetection {
 		return mRgba;
 	}
 
-	public void updateImage() {
+	synchronized public void updateImage() {
 
-		setUpdate(true);
-		VideoCapture capture = new VideoCapture(index);
+		faceDetection.setUpdate(true);
+		VideoCapture capture = new VideoCapture(1);
+
 		Mat webcam_image = new Mat();
 
 		if (capture.isOpened()) {
 			while (play) {
-					capture.read(webcam_image);
-					if (!webcam_image.empty()) {
-						webcam_image = detect(webcam_image);
-						image = MatToBufferedImage(webcam_image);
-					} else {
-						System.out.println(" -- Break!");
-						capture.release();
-						break;
-					}
+				capture.read(webcam_image);
+				if (!webcam_image.empty()) {
+//					webcam_image = detect(webcam_image);
+					image = MatToBufferedImage(webcam_image);
+				} else {
+					System.out.println(" -- Break!");
+				}
 			}
 		}
 		System.out.println("Update Image is completed...");
 		capture.release();
 
-		setUpdate(false);
+		faceDetection.setUpdate(false);
 	}
 
 	public byte[] getImageBytes() {
 		byte[] imageBytes = null;
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
-		if (!isUpdate()) {
+		if (!faceDetection.isUpdate()) {
 			Thread thread = new Thread() {
 				public void run() {
-					updateImage();
+					faceDetection.updateImage();
 				}
 			};
 			thread.start();
@@ -164,12 +190,32 @@ public class FaceDetection {
 	}
 
 	public static void main(String[] args) {
+		// FaceDetection faceDetection = FaceDetection.getInstance();
+		// faceDetection.getImageBytes();
 
-		CamLibrary.loadLibrary();
-		FaceDetection detection = new FaceDetection(0);
-		byte[] dd = detection.getImageBytes();
-		
-		FaceDetection detection2 = new FaceDetection(1);
-		byte[] dd2 = detection2.getImageBytes();
+		// FaceDetection.loadLibrary();
+		// VideoCapture capture = new VideoCapture(0);
+		// Mat webcam_image = new Mat();
+		//
+		// if(capture.isOpened()){
+		// while(true){
+		// capture.read(webcam_image);
+		// System.out.println(webcam_image.width() + ", " +
+		// webcam_image.height());
+		// }
+		// }
+
+		CamDetection.loadLibrary();
+		VideoCapture capture = new VideoCapture(0);
+		Mat webcam_image = new Mat();
+		int count = 1;
+		if (capture.isOpened()) {
+			while (++count < 60) {
+				capture.read(webcam_image);
+
+				System.out.println("count: " + count);
+			}
+		}
+		System.out.println("Update Image is completed...");
 	}
 }

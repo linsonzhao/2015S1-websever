@@ -18,12 +18,16 @@ public class LiveStream {
 
 	private static final Set<Session> sessions = Collections
 			.synchronizedSet(new HashSet<Session>());
-	private FaceDetection faceDetection;
+	private static FaceDetection faceDetection;
+	private static FaceDetection faceDetection2;
 	private CamDeviceSessionHandler sessionHandler;
+	private boolean toggle;
 
 	public LiveStream() {
-		faceDetection = FaceDetection.getInstance();
+		faceDetection = new FaceDetection(0);
+		faceDetection2 = new FaceDetection(1);
 		sessionHandler = CamDeviceSessionHandler.getInstance();
+		toggle = false;
 	}
 
 	@OnOpen
@@ -31,6 +35,7 @@ public class LiveStream {
 		session.setMaxBinaryMessageBufferSize(1024 * 512);
 		sessions.add(session);
 		faceDetection.setPlay(true);
+		faceDetection2.setPlay(true);
 		
 		System.out.println("session open");
 
@@ -42,7 +47,15 @@ public class LiveStream {
 		System.out.println("message: " + message);
 
 		try {
-			byte[] imageInByte = faceDetection.getImageBytes();
+			byte[] imageInByte;
+			if(toggle){
+				imageInByte = faceDetection2.getImageBytes();
+				toggle = false;
+			}
+			else{
+				imageInByte = faceDetection.getImageBytes();
+				toggle = true;
+			}
 
 			ByteBuffer buf = ByteBuffer.wrap(imageInByte);
 
@@ -62,6 +75,7 @@ public class LiveStream {
 
 		if (sessions.isEmpty()) {
 			faceDetection.setPlay(false);
+			faceDetection2.setPlay(false);
 		}
 	}
 

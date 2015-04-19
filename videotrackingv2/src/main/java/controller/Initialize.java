@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 
 import com.Scheduler;
+import com.webcam.CamLibrary;
 import com.webcam.FaceDetection;
 
 import dao.AppInfo;
@@ -38,6 +39,8 @@ public class Initialize extends HttpServlet {
 		hostUrl = "http://localhost:8080/videotracking";
 		scheduler = new Scheduler();
 		scheduler.scheduleControl();
+		
+		CamLibrary.loadLibrary();
 
 		System.out.println("Starting...");
 		logger.debug("Starting...");

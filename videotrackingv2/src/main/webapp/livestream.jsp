@@ -29,7 +29,7 @@
 		}
 		timer = setInterval(function() {
 			ws.send("waiting for image..");
-		}, 50);
+		}, 1500);
 	</script>
 
 	<center>
