@@ -35,8 +35,6 @@ public class LiveVideo {
 	public void onOpen(Session session) throws IOException, EncodeException {
 		session.setMaxBinaryMessageBufferSize(1024 * 512);
 		sessions.add(session);
-		faceDetection.setPlay(false);
-		faceDetection2.setPlay(false);
 		
 		System.out.println("session open");
 	}

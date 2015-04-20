@@ -32,7 +32,6 @@ public class DetectionWSS2 {
 	public void onOpen(Session session) throws IOException, EncodeException {
 		session.setMaxBinaryMessageBufferSize(1024 * 512);
 		sessions.add(session);
-		faceDetection.setPlay(false);
 
 		System.out.println("session open");
 	}

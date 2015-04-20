@@ -22,7 +22,7 @@ public class CameraWSS1 {
 
 	private static final Set<Session> sessions = Collections
 			.synchronizedSet(new HashSet<Session>());
-	private FaceDetection faceDetection;
+	private static FaceDetection faceDetection;
 
 	public CameraWSS1() {
 		faceDetection = CamControl.getInstance().getFaceDetection1();
@@ -32,7 +32,6 @@ public class CameraWSS1 {
 	public void onOpen(Session session) throws IOException, EncodeException {
 		session.setMaxBinaryMessageBufferSize(1024 * 512);
 		sessions.add(session);
-		faceDetection.setPlay(false);
 
 		System.out.println("session open");
 	}

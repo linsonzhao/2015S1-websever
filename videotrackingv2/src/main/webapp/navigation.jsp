@@ -32,7 +32,7 @@
 
 		<li><a href="#">Live Vieos</a>
 			<ul>
-				<li><a href="<%=request.getContextPath()%>/livestream.jsp">Video Collection</a></li>
+				<li><a href="<%=request.getContextPath()%>/twocameras.jsp">Video Collection</a></li>
 				<li><a href="<%=request.getContextPath()%>/camera1.jsp">Animal 1</a></li>
 				<li><a href="<%=request.getContextPath()%>/camera2.jsp">Animal 2</a></li>
 			</ul>
