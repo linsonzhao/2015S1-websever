@@ -1,4 +1,4 @@
-package com.webcam;
+package com.websocket;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -13,49 +13,39 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
-@ServerEndpoint("/livestream")
-public class LiveStream {
+import com.webcam.CamControl;
+import com.webcam.FaceDetection;
+import com.webcam.CamDeviceSessionHandler;
+
+@ServerEndpoint("/camera1")
+public class CameraWSS1 {
 
 	private static final Set<Session> sessions = Collections
 			.synchronizedSet(new HashSet<Session>());
-	private static FaceDetection faceDetection;
-	private static FaceDetection faceDetection2;
-	private CamDeviceSessionHandler sessionHandler;
-	private boolean toggle;
+	private FaceDetection faceDetection;
 
-	public LiveStream() {
-		faceDetection = new FaceDetection(0);
-		faceDetection2 = new FaceDetection(1);
-		sessionHandler = CamDeviceSessionHandler.getInstance();
-		toggle = false;
+	public CameraWSS1() {
+		faceDetection = CamControl.getInstance().getFaceDetection1();
 	}
 
 	@OnOpen
 	public void onOpen(Session session) throws IOException, EncodeException {
 		session.setMaxBinaryMessageBufferSize(1024 * 512);
 		sessions.add(session);
-		faceDetection.setPlay(true);
-		faceDetection2.setPlay(true);
-		
-		System.out.println("session open");
+		faceDetection.setPlay(false);
 
+		System.out.println("session open");
 	}
 
 	@OnMessage
 	public void processVideo(String message, Session session) {
-		System.out.println("INsite process Video");
-		System.out.println("message: " + message);
+		System.out.println("Session id: " + session.getId());
+		faceDetection.setPlay(true);
 
 		try {
 			byte[] imageInByte;
-			if(toggle){
-				imageInByte = faceDetection2.getDetImageBytes();
-				toggle = false;
-			}
-			else{
-				imageInByte = faceDetection.getDetImageBytes();
-				toggle = true;
-			}
+
+			imageInByte = faceDetection.getRawImageBytes();
 
 			ByteBuffer buf = ByteBuffer.wrap(imageInByte);
 
@@ -64,18 +54,17 @@ public class LiveStream {
 			}
 
 		} catch (Exception ioe) {
-			System.out.println("Error sending message " + ioe.getMessage());
+			System.out.println("Error sending message - camera1:" + ioe.getMessage());
 		}
 	}
 
 	@OnClose
 	public void onClose(Session session) {
-		System.out.println("Goodbye !");
+		System.out.println("Camera1: Goodbye !");
 		sessions.remove(session);
 
 		if (sessions.isEmpty()) {
 			faceDetection.setPlay(false);
-			faceDetection2.setPlay(false);
 		}
 	}
 

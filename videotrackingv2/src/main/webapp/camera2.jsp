@@ -7,13 +7,13 @@
 <link rel="stylesheet"
 	href="<%=request.getContextPath()%>/css/myNav.css">
 
-<title>Insert title here</title>
+<title>camera</title>
 </head>
 <body background="<%=request.getContextPath()%>/images/images.jpg">
 	<%@ include file="navigation.jsp"%>
 	<script type="text/javascript">
 		var ws = new WebSocket("ws://" + location.host
-				+ "/videotracking/livevideo");
+				+ "/videotracking/camera2");
 		ws.onopen = function() {
 			console.log("Openened connection to websocket");
 		}
@@ -35,7 +35,7 @@
 	<center>
 		<h1>&nbsp</h1>
 		<h1>&nbsp</h1>
-
+		
 		<h1>&nbsp</h1>
 
 		<div>

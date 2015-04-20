@@ -13,7 +13,7 @@
 	<%@ include file="navigation.jsp"%>
 	<script type="text/javascript">
 		var ws = new WebSocket("ws://" + location.host
-				+ "/videotracking/livevideo");
+				+ "/videotracking/detection2");
 		ws.onopen = function() {
 			console.log("Openened connection to websocket");
 		}

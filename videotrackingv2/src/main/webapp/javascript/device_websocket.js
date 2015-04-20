@@ -18,6 +18,13 @@ ws.onmessage = function(event) {
 		slWebcamName.appendChild(option);
 		var opt = document.getElementById(id);
 		console.log(opt.id + "," + opt.tagName + "," + opt.value);
+		
+		var target = document.getElementById("target");
+		url = window.URL.createObjectURL(device.image);
+		target.onload = function() {
+			window.URL.revokeObjectURL(url);
+		};
+		target.src = url;
 	}
 	if (device.action === "clear") {
 		var size = parseInt(device.size);

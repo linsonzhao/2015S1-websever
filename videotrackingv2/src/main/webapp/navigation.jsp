@@ -30,7 +30,20 @@
 
 <!-- 		<li><a href="#">Subscribe</a></li> -->
 
-		<li><a href="<%=request.getContextPath()%>/livestream.jsp">LiveVieo</a></li>
+		<li><a href="#">Live Vieos</a>
+			<ul>
+				<li><a href="<%=request.getContextPath()%>/livestream.jsp">Video Collection</a></li>
+				<li><a href="<%=request.getContextPath()%>/camera1.jsp">Animal 1</a></li>
+				<li><a href="<%=request.getContextPath()%>/camera2.jsp">Animal 2</a></li>
+			</ul>
+		</li>
+
+		<li><a href="#">Human Detection</a>
+			<ul>
+				<li><a href="<%=request.getContextPath()%>/facedetection1.jsp">Location 1</a></li>
+				<li><a href="<%=request.getContextPath()%>/facedetection2.jsp">Location 2</a></li>
+			</ul>
+		</li>
 
 		<%-- 		<li><a href="<%=request.getContextPath()%>/demo.jsp">Demo</a></li> --%>
 

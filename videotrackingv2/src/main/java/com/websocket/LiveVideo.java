@@ -1,10 +1,11 @@
-package com.webcam;
+package com.websocket;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.Timer;
 
 import javax.websocket.EncodeException;
 import javax.websocket.OnClose;
@@ -13,48 +14,49 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
-@ServerEndpoint("/livestream")
-public class LiveStream {
+import com.webcam.CamControl;
+import com.webcam.FaceDetection;
+import com.webcam.CamDeviceSessionHandler;
+
+@ServerEndpoint("/livevideo")
+public class LiveVideo {
 
 	private static final Set<Session> sessions = Collections
 			.synchronizedSet(new HashSet<Session>());
-	private static FaceDetection faceDetection;
-	private static FaceDetection faceDetection2;
-	private CamDeviceSessionHandler sessionHandler;
-	private boolean toggle;
+	private FaceDetection faceDetection;
+	private FaceDetection faceDetection2;
 
-	public LiveStream() {
-		faceDetection = new FaceDetection(0);
-		faceDetection2 = new FaceDetection(1);
-		sessionHandler = CamDeviceSessionHandler.getInstance();
-		toggle = false;
+	public LiveVideo() {
+		faceDetection = CamControl.getInstance().getFaceDetection1();
+		faceDetection2 = CamControl.getInstance().getFaceDetection2();
 	}
 
 	@OnOpen
 	public void onOpen(Session session) throws IOException, EncodeException {
 		session.setMaxBinaryMessageBufferSize(1024 * 512);
 		sessions.add(session);
-		faceDetection.setPlay(true);
-		faceDetection2.setPlay(true);
+		faceDetection.setPlay(false);
+		faceDetection2.setPlay(false);
 		
 		System.out.println("session open");
-
 	}
 
 	@OnMessage
 	public void processVideo(String message, Session session) {
-		System.out.println("INsite process Video");
-		System.out.println("message: " + message);
+		System.out.println("Session id: " + session.getId());
+		faceDetection.setPlay(true);
+		faceDetection2.setPlay(true);
 
+		boolean toggle = CamControl.getInstance().isToggle();
+		
 		try {
 			byte[] imageInByte;
+			
 			if(toggle){
 				imageInByte = faceDetection2.getDetImageBytes();
-				toggle = false;
 			}
 			else{
 				imageInByte = faceDetection.getDetImageBytes();
-				toggle = true;
 			}
 
 			ByteBuffer buf = ByteBuffer.wrap(imageInByte);

@@ -29,7 +29,8 @@ import com.github.sarxos.webcam.Webcam;
 public class FaceDetection {
 
 	private CascadeClassifier face_cascade;
-	private BufferedImage image;
+	private BufferedImage image_det;
+	private BufferedImage image_raw;
 	private boolean play;
 	private boolean update;
 	private List<Webcam> webcamList;
@@ -73,16 +74,16 @@ public class FaceDetection {
 		byte[] sourcePixels = new byte[width * height * channels];
 		matBGR.get(0, 0, sourcePixels);
 		// create new image and get reference to backing data
-		image = new BufferedImage(width, height, BufferedImage.TYPE_3BYTE_BGR);
+		image_det = new BufferedImage(width, height, BufferedImage.TYPE_3BYTE_BGR);
 
-		final byte[] targetPixels = ((DataBufferByte) image.getRaster()
+		final byte[] targetPixels = ((DataBufferByte) image_det.getRaster()
 				.getDataBuffer()).getData();
 		System.arraycopy(sourcePixels, 0, targetPixels, 0, sourcePixels.length);
 		long endTime = System.nanoTime();
 		System.out.println(String.format("Elapsed time: %.2f ms",
 				(float) (endTime - startTime) / 1000000));
 
-		return image;
+		return image_det;
 	}
 
 	private Mat detect(Mat inputframe) {
@@ -107,18 +108,18 @@ public class FaceDetection {
 		return mRgba;
 	}
 
-	public void updateImage() {
+	public void updateDetImage() {
 
 		setUpdate(true);
 		VideoCapture capture = new VideoCapture(index);
-		Mat webcam_image = new Mat();
+		Mat webcam_image_det = new Mat();
 
 		if (capture.isOpened()) {
 			while (play) {
-					capture.read(webcam_image);
-					if (!webcam_image.empty()) {
-						webcam_image = detect(webcam_image);
-						image = MatToBufferedImage(webcam_image);
+					capture.read(webcam_image_det);
+					if (!webcam_image_det.empty()) {
+						webcam_image_det = detect(webcam_image_det);
+						image_det = MatToBufferedImage(webcam_image_det);
 					} else {
 						System.out.println(" -- Break!");
 						capture.release();
@@ -128,30 +129,85 @@ public class FaceDetection {
 		}
 		System.out.println("Update Image is completed...");
 		capture.release();
+		
+		setUpdate(false);
+	}
+	
+	public void updateRawImage() {
 
+		setUpdate(true);
+		VideoCapture capture = new VideoCapture(index);
+		Mat webcam_image_det = new Mat();
+
+		if (capture.isOpened()) {
+			while (play) {
+					capture.read(webcam_image_det);
+					if (!webcam_image_det.empty()) {
+						image_raw = MatToBufferedImage(webcam_image_det);
+					} else {
+						System.out.println(" raw image -- Break!");
+						capture.release();
+						break;
+					}
+			}
+		}
+		System.out.println("Update raw Image is completed...");
+		capture.release();
+		
 		setUpdate(false);
 	}
 
-	public byte[] getImageBytes() {
+	public byte[] getRawImageBytes() {
 		byte[] imageBytes = null;
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
 		if (!isUpdate()) {
 			Thread thread = new Thread() {
 				public void run() {
-					updateImage();
+					updateRawImage();
 				}
 			};
 			thread.start();
 		}
 
-		while (image == null) {
+		while (image_raw == null) {
 			// wait for camera image...//
 			// System.out.println("Waiting for camera image...");
 		}
 
 		try {
-			ImageIO.write(image, "jpg", baos);
+			ImageIO.write(image_raw, "jpg", baos);
+			baos.flush();
+			imageBytes = baos.toByteArray();
+			baos.close();
+		} catch (Exception e) {
+			System.out.println("WebcamStream error...");
+			e.printStackTrace();
+		}
+
+		return imageBytes;
+	}
+	
+	public byte[] getDetImageBytes() {
+		byte[] imageBytes = null;
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+		if (!isUpdate()) {
+			Thread thread = new Thread() {
+				public void run() {
+					updateDetImage();
+				}
+			};
+			thread.start();
+		}
+
+		while (image_det == null) {
+			// wait for camera image...//
+			// System.out.println("Waiting for camera image...");
+		}
+
+		try {
+			ImageIO.write(image_det, "jpg", baos);
 			baos.flush();
 			imageBytes = baos.toByteArray();
 			baos.close();
@@ -167,9 +223,9 @@ public class FaceDetection {
 
 		CamLibrary.loadLibrary();
 		FaceDetection detection = new FaceDetection(0);
-		byte[] dd = detection.getImageBytes();
+		byte[] dd = detection.getDetImageBytes();
 		
 		FaceDetection detection2 = new FaceDetection(1);
-		byte[] dd2 = detection2.getImageBytes();
+		byte[] dd2 = detection2.getDetImageBytes();
 	}
 }
