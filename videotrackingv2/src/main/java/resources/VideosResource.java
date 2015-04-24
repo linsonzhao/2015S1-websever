@@ -17,6 +17,7 @@ import javax.ws.rs.core.UriInfo;
 import org.apache.log4j.Logger;
 
 import com.TrackingFile;
+import com.hibernate.commons.HiVideoDao;
 
 import controller.MainAction;
 import jni.JniMain;
@@ -131,5 +132,31 @@ public class VideosResource {
 			return new VideoResource(uriInfo, request, videoId);
 		else
 			return null;
+	}
+	
+	// Return raw videos to clients
+	@GET
+	@Path("/rawvideos")
+	@Produces(MediaType.TEXT_XML)
+	public List<Video> getRawVideos(@QueryParam("apikey") String apikey) {
+		List<Video> rawVideos = new ArrayList<Video>();
+		if(apikey.equalsIgnoreCase(AppInfo.getInstance().getApikey())){
+			rawVideos.addAll(HiVideoDao.getInstance().getRawVideos().values());
+		}
+		
+		return rawVideos;
+	}
+	
+	// Return tracked videos to clients
+	@GET
+	@Path("/trackedvideos")
+	@Produces(MediaType.TEXT_XML)
+	public List<Video> getTrackedVideos(@QueryParam("apikey") String apikey) {
+		List<Video> trackedVideos = new ArrayList<Video>();
+		if(apikey.equalsIgnoreCase(AppInfo.getInstance().getApikey())){
+			trackedVideos.addAll(HiVideoDao.getInstance().getTrackedVideos().values());
+		}
+		
+		return trackedVideos;
 	}
 }

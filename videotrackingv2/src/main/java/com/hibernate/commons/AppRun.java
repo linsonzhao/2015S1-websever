@@ -31,7 +31,7 @@ public class AppRun {
 
 			transaction = session.beginTransaction();
 			Query query = session
-					.createQuery("FROM Video");
+					.createQuery("FROM Video WHERE tracking=false");
 			// query.setMaxResults(2);
 			List empList = query.list();
 			transaction.commit();
