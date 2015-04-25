@@ -6,11 +6,14 @@
    <session-factory>
    <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
    <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
-   <property name="hibernate.connection.url">jdbc:mysql://localhost/videotracking</property>
+   <property name="hibernate.connection.url">jdbc:mysql://localhost/objectdetection</property>
    <property name="hibernate.connection.username">root</property>
    <property name="hibernate.connection.password">Admin123</property>
-   <property name="hibernate.hbm2ddl.auto">update</property>
+<property name="hibernate.hbm2ddl.auto">create</property>
    <property name="show_sql">false</property>
-   <mapping class="model.Video"/>
+   <mapping class="model.Object"/>
+   <mapping class="model.ObjectType"/>
+   <mapping class="model.DetectedVideo"/>
+   <mapping class="model.VideoType"/>
 </session-factory>
 </hibernate-configuration>

@@ -52,7 +52,8 @@ public class HiVideoDao {
 
 		System.out.println("HiVideoDao updating...");
 		
-		String configFile = "mysql.cfg.xml";
+//		String configFile = "mysql.cfg.xml";
+		String configFile = "update.mysql.localhost.videotracking.xml";
 		SessionFactory sessionFactory = null;
 		Session session = null;
 		Transaction transaction = null;

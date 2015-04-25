@@ -118,6 +118,11 @@
 			<artifactId>javaee-api</artifactId>
 			<version>7.0</version>
 		</dependency>
+		<dependency>
+			<groupId>com.pm</groupId>
+			<artifactId>SQLServerJDBC</artifactId>
+			<version>4.0</version>
+		</dependency>
 	</dependencies>
 	<repositories>
 		<repository>
